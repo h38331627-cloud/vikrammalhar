@@ -1,193 +1,1184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VIKRAM MALHAR | Cricket Match Updates</title>
+  <meta name="description" content="Daily cricket match updates, live match stats, upcoming matches, completed matches, schedules, reports and analysis. Powered by VIKRAM MALHAR." />
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root{
+      --bg:#07131f;
+      --bg2:#0b1f34;
+      --card:#122844;
+      --card2:#173254;
+      --text:#ffffff;
+      --muted:#bfd1ec;
+      --lime:#d8ff4f;
+      --cyan:#00e4ff;
+      --green:#31d07b;
+      --red:#ff4d6d;
+      --orange:#ffb020;
+      --border:rgba(255,255,255,.10);
+      --shadow:0 14px 35px rgba(0,0,0,.35);
+      --radius:24px;
+    }
 
-<title>RAHUL TOSS FIXER</title>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, Helvetica, sans-serif;
+    }
 
-<!-- META PIXEL -->
-<script>
-!function(f,b,e,v,n,t,s){
-if(f.fbq)return;n=f.fbq=function(){
-n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;
-n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)
-}(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    html{scroll-behavior:smooth;}
+    body{
+      background:
+        radial-gradient(circle at 10% 10%, rgba(0,228,255,.12), transparent 22%),
+        radial-gradient(circle at 90% 10%, rgba(216,255,79,.12), transparent 22%),
+        radial-gradient(circle at 50% 100%, rgba(255,77,109,.10), transparent 20%),
+        linear-gradient(180deg,var(--bg),var(--bg2));
+      color:var(--text);
+      min-height:100vh;
+      overflow-x:hidden;
+    }
 
-fbq('init', '1265282839024084');
-fbq('track', 'PageView');
-fbq('track', 'ViewContent');
-</script>
+    a{text-decoration:none;color:inherit;}
+    .container{width:min(1180px,92%);margin:auto;}
 
-<script src="https://cdn.tailwindcss.com"></script>
+    .bgfx{
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      overflow:hidden;
+      pointer-events:none;
+    }
+    .orb{
+      position:absolute;
+      border-radius:50%;
+      filter:blur(60px);
+      opacity:.18;
+      animation:float 10s ease-in-out infinite alternate;
+    }
+    .orb.one{width:260px;height:260px;background:var(--cyan);top:6%;left:-40px;}
+    .orb.two{width:300px;height:300px;background:var(--lime);top:35%;right:-80px;animation-delay:1.5s;}
+    .orb.three{width:280px;height:280px;background:var(--red);bottom:-40px;left:35%;animation-delay:2s;}
+    @keyframes float{
+      from{transform:translate(0,0) scale(1);}
+      to{transform:translate(20px,-30px) scale(1.06);}
+    }
 
-<style>
-body{
-margin:0;
-font-family:sans-serif;
-background:linear-gradient(to bottom,#020617,#0f172a);
-color:white;
-}
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:99;
+      background:rgba(7,19,31,.78);
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .topbar .wrap{
+      width:min(1180px,92%);
+      margin:auto;
+      padding:12px 0;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+    .power{
+      background:linear-gradient(90deg,var(--lime),#f3ffad,var(--lime));
+      color:#101010;
+      font-weight:900;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      border-radius:999px;
+      padding:10px 18px;
+      font-size:clamp(14px,2vw,24px);
+      box-shadow:0 10px 30px rgba(216,255,79,.25);
+      animation:glow 2s infinite;
+      text-align:center;
+    }
+    @keyframes glow{
+      0%,100%{transform:scale(1)}
+      50%{transform:scale(1.02)}
+    }
 
-/* FULL SCREEN */
-.main{
-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:space-between;
-padding:20px;
-}
+    .ticker{
+      background:linear-gradient(90deg, rgba(255,77,109,.14), rgba(0,228,255,.12));
+      border-bottom:1px solid rgba(255,255,255,.08);
+      overflow:hidden;
+      white-space:nowrap;
+    }
+    .ticker-track{
+      display:inline-block;
+      padding:12px 0;
+      animation:marquee 24s linear infinite;
+      min-width:200%;
+    }
+    .ticker span{
+      display:inline-block;
+      margin-right:42px;
+      font-weight:800;
+      color:#eef6ff;
+      font-size:14px;
+    }
+    .live-dot{
+      display:inline-block;
+      width:9px;height:9px;border-radius:50%;
+      background:var(--red);
+      margin-right:8px;
+      box-shadow:0 0 0 0 rgba(255,77,109,.8);
+      animation:pulse 1.5s infinite;
+      vertical-align:middle;
+    }
+    @keyframes pulse{
+      0%{box-shadow:0 0 0 0 rgba(255,77,109,.8)}
+      70%{box-shadow:0 0 0 12px rgba(255,77,109,0)}
+      100%{box-shadow:0 0 0 0 rgba(255,77,109,0)}
+    }
+    @keyframes marquee{
+      from{transform:translateX(0)}
+      to{transform:translateX(-50%)}
+    }
 
-/* TITLE */
-.title{
-font-size:28px;
-font-weight:900;
-color:#facc15;
-text-align:center;
-}
+    .hero{padding:26px 0 22px;}
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:22px;
+    }
+    .hero-card,.hero-side,.card,.panel,.rank-card,.series-card,.update,.cta-box{
+      background:linear-gradient(180deg, rgba(23,50,84,.92), rgba(11,26,46,.98));
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .hero-card{
+      padding:28px;
+      position:relative;
+      overflow:hidden;
+      min-height:460px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+    .hero-card:before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 85% 20%, rgba(216,255,79,.18), transparent 20%),
+        radial-gradient(circle at 15% 85%, rgba(0,228,255,.14), transparent 22%);
+      pointer-events:none;
+    }
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      width:max-content;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.08);
+      color:var(--lime);
+      font-weight:800;
+      margin-bottom:18px;
+      font-size:14px;
+    }
+    .hero h1{
+      font-size:clamp(30px,5vw,60px);
+      line-height:1.03;
+      margin-bottom:14px;
+      font-weight:900;
+      position:relative;
+      z-index:1;
+    }
+    .hero h1 .grad{
+      background:linear-gradient(90deg,#fff,var(--lime),var(--cyan));
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+      color:transparent;
+    }
+    .hero p{
+      color:var(--muted);
+      line-height:1.8;
+      font-size:16px;
+      max-width:780px;
+      margin-bottom:22px;
+      position:relative;
+      z-index:1;
+    }
+    .hero-actions{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-bottom:20px;
+      position:relative;
+      z-index:1;
+    }
+    .btn{
+      border:none;
+      cursor:pointer;
+      border-radius:14px;
+      padding:14px 20px;
+      font-weight:900;
+      transition:.25s ease;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      font-size:15px;
+    }
+    .btn-primary{
+      background:linear-gradient(90deg,var(--lime),#f3ffad);
+      color:#101010;
+      box-shadow:0 10px 25px rgba(216,255,79,.22);
+    }
+    .btn-secondary{
+      background:rgba(255,255,255,.07);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .btn:hover{transform:translateY(-2px);}
 
-/* CARD */
-.card{
-background:#111827;
-padding:20px;
-border-radius:16px;
-text-align:center;
-margin-top:15px;
-box-shadow:0 10px 25px rgba(0,0,0,0.5);
-}
+    .hero-stats{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+      margin-top:auto;
+      position:relative;
+      z-index:1;
+    }
+    .mini{
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;
+      padding:16px;
+      text-align:center;
+    }
+    .mini h3{font-size:24px;color:var(--lime);margin-bottom:6px;}
+    .mini p{margin:0;font-size:12px;line-height:1.5;color:#dce8ff;}
 
-/* BUTTON */
-.btn{
-display:block;
-width:100%;
-padding:16px;
-border-radius:12px;
-font-weight:bold;
-text-align:center;
-margin-top:15px;
-transition:0.2s;
-}
+    .hero-side{
+      padding:22px;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+    .section-title{
+      font-size:24px;
+      font-weight:900;
+      margin-bottom:4px;
+    }
+    .subtxt{color:var(--muted);font-size:14px;line-height:1.7;}
 
-.btn1{ background:#22c55e; }
-.btn2{ background:#2563eb; }
+    .scorebox{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
+      padding:18px;
+    }
+    .row{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+      padding:12px 0;
+      border-bottom:1px dashed rgba(255,255,255,.10);
+    }
+    .row:last-child{border-bottom:none;}
+    .left{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .avatar{
+      width:46px;height:46px;border-radius:14px;
+      display:grid;place-items:center;
+      font-weight:900;color:#101010;
+      background:linear-gradient(135deg,var(--lime),#9eff00);
+    }
+    .avatar.alt{background:linear-gradient(135deg,var(--cyan),#7cf5ff);}
+    .name{font-size:16px;font-weight:900;}
+    .meta{font-size:12px;color:var(--muted);margin-top:4px;}
+    .score{font-weight:900;font-size:18px;text-align:right;}
+    .grid2{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+    }
+    .smallbox{
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      padding:14px;
+    }
+    .smallbox h4{
+      font-size:12px;
+      color:var(--cyan);
+      margin-bottom:6px;
+      text-transform:uppercase;
+      letter-spacing:.7px;
+    }
+    .smallbox p{font-size:14px;font-weight:800;line-height:1.5;}
 
-.btn:hover{
-transform:scale(1.05);
-}
+    .section{padding:10px 0 28px;}
+    .head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+    .head h2{
+      font-size:clamp(22px,3vw,34px);
+      font-weight:900;
+      margin-bottom:6px;
+    }
+    .head p{color:var(--muted);max-width:760px;line-height:1.8;font-size:15px;}
+    .tabs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .tab{
+      border:none;
+      cursor:pointer;
+      padding:10px 16px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.08);
+      font-weight:800;
+      transition:.2s;
+    }
+    .tab.active,.tab:hover{
+      background:linear-gradient(90deg,var(--lime),#f3ffad);
+      color:#101010;
+    }
 
-/* BADGE */
-.badge{
-background:#ef4444;
-padding:5px 10px;
-border-radius:20px;
-font-size:12px;
-display:inline-block;
-margin-top:8px;
-}
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+    }
+    .card{
+      padding:20px;
+      position:relative;
+      overflow:hidden;
+      transition:.25s;
+    }
+    .card:hover{transform:translateY(-4px);}
+    .card:after{
+      content:"";
+      position:absolute;
+      width:140px;height:140px;border-radius:50%;
+      right:-35px;bottom:-35px;
+      background:radial-gradient(circle, rgba(216,255,79,.12), transparent 70%);
+      pointer-events:none;
+    }
+    .card-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:16px;
+    }
+    .tag{
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.5px;
+      text-transform:uppercase;
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .live{background:rgba(255,77,109,.16);color:#fff;border-color:rgba(255,77,109,.28);}
+    .upcoming{background:linear-gradient(90deg,var(--lime),#f3ffad);color:#101010;}
+    .completed{background:rgba(49,208,123,.16);color:#dcffe9;border-color:rgba(49,208,123,.28);}
+    .small-time{font-size:12px;color:var(--muted);font-weight:700;}
+    .vs{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:16px;
+    }
+    .vs-box{
+      flex:1;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;
+      padding:14px;
+      text-align:center;
+    }
+    .vs-box .n{font-size:18px;font-weight:900;margin-bottom:8px;}
+    .vs-box .m{font-size:13px;color:var(--muted);line-height:1.5;}
+    .vsmid{
+      font-size:22px;
+      font-weight:900;
+      color:var(--lime);
+      min-width:40px;
+      text-align:center;
+    }
+    .bottom{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .chip{
+      flex:1;
+      min-width:130px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      padding:10px 12px;
+      font-size:13px;
+      line-height:1.6;
+      color:#dce8ff;
+    }
+    .chip b{
+      display:block;
+      color:var(--cyan);
+      font-size:12px;
+      margin-bottom:4px;
+      text-transform:uppercase;
+      letter-spacing:.6px;
+    }
 
-/* DISCLAIMER */
-.disclaimer{
-font-size:11px;
-color:#9ca3af;
-text-align:center;
-margin-top:15px;
-line-height:1.4;
-}
-</style>
+    .split{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:18px;
+    }
+    .panel{padding:22px;}
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      margin-top:12px;
+    }
+    .item{
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:14px;
+      align-items:center;
+      padding:16px;
+      border-radius:18px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      transition:.2s;
+    }
+    .item:hover{transform:translateX(2px);}
+    .datebox{
+      min-width:74px;
+      text-align:center;
+      padding:10px;
+      border-radius:16px;
+      background:linear-gradient(180deg,var(--lime),#f3ffad);
+      color:#101010;
+      font-weight:900;
+    }
+    .datebox .d1{font-size:12px;text-transform:uppercase;letter-spacing:.8px;}
+    .datebox .d2{font-size:26px;line-height:1.1;}
+    .item h4{font-size:17px;margin-bottom:5px;}
+    .item p{font-size:14px;color:var(--muted);line-height:1.6;}
+    .rtime{text-align:right;font-weight:900;}
+    .rtime span{display:block;color:var(--cyan);font-size:12px;margin-top:4px;}
 
+    .stats-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
+      margin-top:14px;
+    }
+    .stat{
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;
+      padding:18px;
+    }
+    .stat .lab{
+      color:var(--cyan);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.7px;
+      text-transform:uppercase;
+      margin-bottom:10px;
+    }
+    .stat .val{font-size:26px;font-weight:900;margin-bottom:6px;}
+    .stat .sub{font-size:13px;color:var(--muted);line-height:1.5;}
+
+    .rank-grid,.series-grid,.updates{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+    }
+    .rank-card,.series-card,.update{
+      padding:20px;
+      transition:.25s;
+    }
+    .rank-card:hover,.series-card:hover,.update:hover{transform:translateY(-4px);}
+    .rank-badge{
+      width:62px;height:62px;border-radius:50%;
+      margin:0 auto 12px;
+      display:grid;place-items:center;
+      font-weight:900;font-size:22px;color:#101010;
+      background:linear-gradient(135deg,var(--lime),#f3ffad);
+      box-shadow:0 10px 24px rgba(216,255,79,.22);
+    }
+    .rank-card{text-align:center;}
+    .rank-card h3,.series-card h3,.update h3{font-size:20px;margin-bottom:10px;}
+    .rank-card p,.series-card p,.update p{color:var(--muted);font-size:14px;line-height:1.7;}
+    .pts{
+      margin-top:12px;
+      display:inline-block;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      font-weight:800;
+    }
+
+    .series-card .tagline{
+      display:inline-block;
+      margin-bottom:12px;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      color:var(--lime);
+    }
+
+    .cta-box{
+      padding:28px;
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:18px;
+      align-items:center;
+      background:
+        radial-gradient(circle at right top, rgba(0,228,255,.18), transparent 24%),
+        radial-gradient(circle at left bottom, rgba(216,255,79,.18), transparent 24%),
+        linear-gradient(180deg, rgba(23,50,84,.96), rgba(11,26,46,.99));
+    }
+    .cta-box h2{font-size:clamp(24px,4vw,40px);line-height:1.15;margin-bottom:10px;}
+    .cta-box p{color:var(--muted);line-height:1.8;font-size:15px;max-width:700px;}
+    .cta-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end;}
+
+    footer{padding:22px 0 40px;}
+    .footer{
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      align-items:center;
+      padding:18px 20px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:20px;
+    }
+    .footer h3{font-size:18px;margin-bottom:6px;}
+    .footer p{color:var(--muted);font-size:14px;line-height:1.7;}
+    .f-right{text-align:right;color:#dce8ff;font-size:14px;line-height:1.8;}
+
+    .reveal{opacity:0;transform:translateY(24px);transition:all .65s ease;}
+    .reveal.show{opacity:1;transform:translateY(0);}
+
+    @media (max-width:1100px){
+      .hero-grid,.split,.cta-box{grid-template-columns:1fr;}
+      .cards,.rank-grid,.series-grid,.updates{grid-template-columns:repeat(2,1fr);}
+      .cta-actions{justify-content:flex-start;}
+    }
+    @media (max-width:768px){
+      .cards,.rank-grid,.series-grid,.updates,.stats-grid,.grid2,.hero-stats{grid-template-columns:1fr;}
+      .item{grid-template-columns:1fr;text-align:left;}
+      .rtime,.f-right{text-align:left;}
+      .hero-card,.hero-side,.panel,.card,.rank-card,.series-card,.update,.cta-box{border-radius:22px;}
+      .hero-card,.hero-side,.panel,.cta-box{padding:18px;}
+    }
+    @media (max-width:520px){
+      .container{width:min(95%,100%);}
+      .btn{width:100%;}
+      .hero-actions{flex-direction:column;}
+      .vs{flex-direction:column;}
+      .vsmid{transform:rotate(90deg);}
+      .power{font-size:14px;padding:9px 14px;}
+      .hero h1{font-size:28px;}
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="main">
+  <div class="bgfx">
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+    <div class="orb three"></div>
+  </div>
 
-<!-- TOP -->
-<div>
-<h1 class="title">RAHUL TOSS FIXER</h1>
+  <div class="topbar">
+    <div class="wrap">
+      <div class="power">POWERED BY VIKRAM MALHAR</div>
+    </div>
+  </div>
 
-<div class="text-center mt-2">
-<span class="badge">🔥 LIMITED ACCESS</span>
-</div>
+  <div class="ticker">
+    <div class="ticker-track">
+      <span><i class="live-dot"></i>LIVE: India vs Australia - 2nd ODI score update</span>
+      <span><i class="live-dot"></i>UPCOMING: CSK vs MI - evening blockbuster</span>
+      <span><i class="live-dot"></i>RESULT: RCB beat KKR by 6 wickets</span>
+      <span><i class="live-dot"></i>TOSS ALERT: Match toss updates available in Telegram</span>
+      <span><i class="live-dot"></i>STATS: Top run scorers and wicket takers updated</span>
 
-<div class="text-center mt-3 text-lg">
-⏳ Join Fast: <span id="countdown" class="text-yellow-300 font-bold">30</span>s
-</div>
+      <span><i class="live-dot"></i>LIVE: India vs Australia - 2nd ODI score update</span>
+      <span><i class="live-dot"></i>UPCOMING: CSK vs MI - evening blockbuster</span>
+      <span><i class="live-dot"></i>RESULT: RCB beat KKR by 6 wickets</span>
+      <span><i class="live-dot"></i>TOSS ALERT: Match toss updates available in Telegram</span>
+      <span><i class="live-dot"></i>STATS: Top run scorers and wicket takers updated</span>
+    </div>
+  </div>
 
-<div class="card">
-<p class="text-lg font-semibold">📢 Daily Toss Updates</p>
-<p class="text-sm mt-2">High Accuracy • Instant Access 👇</p>
-</div>
-</div>
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-card reveal">
+          <div class="eyebrow">
+            <span class="live-dot"></span>
+            CRICKET MATCHES • LIVE SCORES • SCHEDULE • REPORTS
+          </div>
 
-<!-- BUTTONS -->
-<div>
+          <h1>
+            Premium <span class="grad">Cricket Match Updates, Schedule, Stats & Reports</span>
+          </h1>
 
-<a href="https://t.me/+BZMHSu-IhjFlZjll" id="btn1">
-<div class="btn btn1">JOIN NOW 🚀</div>
-</a>
+          <p>
+            Get complete cricket coverage in one premium landing page — live matches, upcoming fixtures, completed results,
+            daily schedule, top player stats, tournament blocks, match reports and Telegram updates.
+            Everything is designed for <strong>VIKRAM MALHAR</strong>.
+          </p>
 
-<a href="https://t.me/+BZMHSu-IhjFlZjll" id="btn2">
-<div class="btn btn2">GET ACCESS ⚡</div>
-</a>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="https://t.me/+RVFoIKKOME9iZDA1" target="_blank">🏏 Join Telegram Channel</a>
+            <a class="btn btn-secondary" href="#match-center">📅 Explore Match Center</a>
+          </div>
 
-<p class="disclaimer">
-⚠️ This page is for informational purposes only.  
-We do not guarantee any results, profits, or accuracy.  
-Users should act at their own discretion.  
-This page follows advertising guidelines and avoids misleading claims.
-</p>
+          <div class="hero-stats">
+            <div class="mini">
+              <h3>24/7</h3>
+              <p>Live cricket monitoring and match update flow</p>
+            </div>
+            <div class="mini">
+              <h3>Live</h3>
+              <p>Ongoing scorecards, toss and innings alerts</p>
+            </div>
+            <div class="mini">
+              <h3>Stats</h3>
+              <p>Runs, wickets, strike rate and match insights</p>
+            </div>
+            <div class="mini">
+              <h3>100%</h3>
+              <p>Responsive mobile + desktop cricket UI</p>
+            </div>
+          </div>
+        </div>
 
-</div>
+        <div class="hero-side reveal">
+          <div>
+            <div class="section-title">Featured Live Match</div>
+            <div class="subtxt">Premium live score block for cricket landing page</div>
+          </div>
 
-</div>
+          <div class="scorebox">
+            <div class="row">
+              <div class="left">
+                <div class="avatar">IND</div>
+                <div>
+                  <div class="name">India</div>
+                  <div class="meta">Batting • 38.2 overs</div>
+                </div>
+              </div>
+              <div class="score">248/5</div>
+            </div>
 
-<script>
+            <div class="row">
+              <div class="left">
+                <div class="avatar alt">AUS</div>
+                <div>
+                  <div class="name">Australia</div>
+                  <div class="meta">Target / Chase pending</div>
+                </div>
+              </div>
+              <div class="score">—</div>
+            </div>
+          </div>
 
-let timeLeft = 30;
-let leadTracked = false;
+          <div class="grid2">
+            <div class="smallbox">
+              <h4>Top Performer</h4>
+              <p>Virat Kohli — 86 (74), 8 fours, strike rotation superb.</p>
+            </div>
+            <div class="smallbox">
+              <h4>Match Trend</h4>
+              <p>India accelerating after 30 overs, death overs could cross 300.</p>
+            </div>
+            <div class="smallbox">
+              <h4>Current Time</h4>
+              <p id="liveClock">Loading...</p>
+            </div>
+            <div class="smallbox">
+              <h4>Next Alert</h4>
+              <p>Final 10 overs projection + bowling pressure update.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-const countdown = document.getElementById("countdown");
+  <section class="section" id="match-center">
+    <div class="container">
+      <div class="head reveal">
+        <div>
+          <h2>Cricket Match Center</h2>
+          <p>Live, upcoming and completed cricket match cards with clean premium UI.</p>
+          <div class="tabs">
+            <button class="tab active" data-filter="all">All Matches</button>
+            <button class="tab" data-filter="live">Live Match</button>
+            <button class="tab" data-filter="upcoming">Upcoming Match</button>
+            <button class="tab" data-filter="completed">Completed Match</button>
+          </div>
+        </div>
+      </div>
 
-const timer = setInterval(() => {
-timeLeft--;
-countdown.innerText = timeLeft;
+      <div class="cards" id="matchCards">
+        <div class="card reveal" data-type="live">
+          <div class="card-top">
+            <div class="tag live">🔴 Live Match</div>
+            <div class="small-time">Updated 1 min ago</div>
+          </div>
+          <div class="vs">
+            <div class="vs-box">
+              <div class="n">India</div>
+              <div class="m">248/5 (38.2)</div>
+            </div>
+            <div class="vsmid">VS</div>
+            <div class="vs-box">
+              <div class="n">Australia</div>
+              <div class="m">Yet to bat</div>
+            </div>
+          </div>
+          <div class="bottom">
+            <div class="chip"><b>Venue</b>Mumbai Stadium</div>
+            <div class="chip"><b>Status</b>India building for 300+ finish</div>
+          </div>
+        </div>
 
-if(timeLeft === 5 && !leadTracked){
-   fbq('track', 'Lead', {
-     content_name: 'Telegram Join',
-     value: 1,
-     currency: 'INR'
-   });
-   leadTracked = true;
-}
+        <div class="card reveal" data-type="upcoming">
+          <div class="card-top">
+            <div class="tag upcoming">Upcoming</div>
+            <div class="small-time">Today • 7:30 PM</div>
+          </div>
+          <div class="vs">
+            <div class="vs-box">
+              <div class="n">CSK</div>
+              <div class="m">Strong batting lineup</div>
+            </div>
+            <div class="vsmid">VS</div>
+            <div class="vs-box">
+              <div class="n">MI</div>
+              <div class="m">Power-packed chase side</div>
+            </div>
+          </div>
+          <div class="bottom">
+            <div class="chip"><b>Focus</b>Toss impact, powerplay and death overs</div>
+            <div class="chip"><b>League</b>T20 League</div>
+          </div>
+        </div>
 
-if(timeLeft < 0){
-clearInterval(timer);
-window.location.href = "https://t.me/+BZMHSu-IhjFlZjll";
-}
-},1000);
+        <div class="card reveal" data-type="completed">
+          <div class="card-top">
+            <div class="tag completed">Completed</div>
+            <div class="small-time">Yesterday</div>
+          </div>
+          <div class="vs">
+            <div class="vs-box">
+              <div class="n">RCB</div>
+              <div class="m">182/4</div>
+            </div>
+            <div class="vsmid">VS</div>
+            <div class="vs-box">
+              <div class="n">KKR</div>
+              <div class="m">178/8</div>
+            </div>
+          </div>
+          <div class="bottom">
+            <div class="chip"><b>Result</b>RCB won by 6 wickets</div>
+            <div class="chip"><b>Highlight</b>Finisher sealed chase in last over</div>
+          </div>
+        </div>
 
-/* TRACKING */
-function trackLead(){
-if(!leadTracked){
-fbq('track', 'Lead', {
-  content_name: 'Telegram Join',
-  value: 1,
-  currency: 'INR'
-});
-leadTracked = true;
-}
-}
+        <div class="card reveal" data-type="live">
+          <div class="card-top">
+            <div class="tag live">🔴 Live Match</div>
+            <div class="small-time">Just now</div>
+          </div>
+          <div class="vs">
+            <div class="vs-box">
+              <div class="n">England</div>
+              <div class="m">122/3 (15.4)</div>
+            </div>
+            <div class="vsmid">VS</div>
+            <div class="vs-box">
+              <div class="n">Pakistan</div>
+              <div class="m">1st innings</div>
+            </div>
+          </div>
+          <div class="bottom">
+            <div class="chip"><b>Momentum</b>Fast scoring in middle overs</div>
+            <div class="chip"><b>Watch</b>Spin attack entering the game</div>
+          </div>
+        </div>
 
-document.getElementById("btn1").onclick = trackLead;
-document.getElementById("btn2").onclick = trackLead;
+        <div class="card reveal" data-type="upcoming">
+          <div class="card-top">
+            <div class="tag upcoming">Upcoming</div>
+            <div class="small-time">Tomorrow • 3:00 PM</div>
+          </div>
+          <div class="vs">
+            <div class="vs-box">
+              <div class="n">South Africa</div>
+              <div class="m">Balanced pace attack</div>
+            </div>
+            <div class="vsmid">VS</div>
+            <div class="vs-box">
+              <div class="n">New Zealand</div>
+              <div class="m">Strong middle order</div>
+            </div>
+          </div>
+          <div class="bottom">
+            <div class="chip"><b>Preview</b>Seam movement and middle-over control</div>
+            <div class="chip"><b>Format</b>ODI</div>
+          </div>
+        </div>
 
-</script>
+        <div class="card reveal" data-type="completed">
+          <div class="card-top">
+            <div class="tag completed">Completed</div>
+            <div class="small-time">2 days ago</div>
+          </div>
+          <div class="vs">
+            <div class="vs-box">
+              <div class="n">Bangladesh</div>
+              <div class="m">154/9</div>
+            </div>
+            <div class="vsmid">VS</div>
+            <div class="vs-box">
+              <div class="n">Sri Lanka</div>
+              <div class="m">155/6</div>
+            </div>
+          </div>
+          <div class="bottom">
+            <div class="chip"><b>Result</b>Sri Lanka won by 4 wickets</div>
+            <div class="chip"><b>Turning Point</b>Late partnership stabilized chase</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
+  <section class="section" id="schedule">
+    <div class="container">
+      <div class="head reveal">
+        <div>
+          <h2>Daily Cricket Schedule & Match Stats</h2>
+          <p>Schedule area for daily cricket fixtures plus a statistics dashboard for runs, wickets and live match insights.</p>
+        </div>
+      </div>
+
+      <div class="split">
+        <div class="panel reveal">
+          <h3 style="font-size:26px;margin-bottom:6px;">Upcoming Cricket Schedule</h3>
+          <p class="subtxt">Replace these with your own daily cricket fixtures and toss-time updates.</p>
+
+          <div class="list">
+            <div class="item">
+              <div class="datebox">
+                <div class="d1">Mon</div>
+                <div class="d2">24</div>
+              </div>
+              <div>
+                <h4>India vs Australia</h4>
+                <p>2nd ODI • Big batting showdown • Toss will be crucial</p>
+              </div>
+              <div class="rtime">7:30 PM <span>Featured Match</span></div>
+            </div>
+
+            <div class="item">
+              <div class="datebox">
+                <div class="d1">Tue</div>
+                <div class="d2">25</div>
+              </div>
+              <div>
+                <h4>CSK vs MI</h4>
+                <p>T20 League • High-scoring clash expected</p>
+              </div>
+              <div class="rtime">7:00 PM <span>League Match</span></div>
+            </div>
+
+            <div class="item">
+              <div class="datebox">
+                <div class="d1">Wed</div>
+                <div class="d2">26</div>
+              </div>
+              <div>
+                <h4>England vs Pakistan</h4>
+                <p>T20 International • Power hitters vs swing attack</p>
+              </div>
+              <div class="rtime">8:15 PM <span>T20I</span></div>
+            </div>
+
+            <div class="item">
+              <div class="datebox">
+                <div class="d1">Thu</div>
+                <div class="d2">27</div>
+              </div>
+              <div>
+                <h4>South Africa vs New Zealand</h4>
+                <p>ODI clash • Balanced bowling vs stable batting unit</p>
+              </div>
+              <div class="rtime">3:00 PM <span>ODI</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel reveal">
+          <h3 style="font-size:26px;margin-bottom:6px;">Cricket Match Stats</h3>
+          <p class="subtxt">Use these boxes for daily match totals, top batting scores, wicket charts and projected match outcomes.</p>
+
+          <div class="stats-grid">
+            <div class="stat">
+              <div class="lab">Today Matches</div>
+              <div class="val">14</div>
+              <div class="sub">Live + scheduled cricket matches</div>
+            </div>
+            <div class="stat">
+              <div class="lab">Live Matches</div>
+              <div class="val">04</div>
+              <div class="sub">Currently active scorecards with inning updates</div>
+            </div>
+            <div class="stat">
+              <div class="lab">Top Score</div>
+              <div class="val">112</div>
+              <div class="sub">Highest individual batting score today</div>
+            </div>
+            <div class="stat">
+              <div class="lab">Best Bowling</div>
+              <div class="val">4/21</div>
+              <div class="sub">Top bowling spell among current fixtures</div>
+            </div>
+            <div class="stat">
+              <div class="lab">Fastest 50</div>
+              <div class="val">19 balls</div>
+              <div class="sub">Explosive batting milestone in T20 action</div>
+            </div>
+            <div class="stat">
+              <div class="lab">Next Big Match</div>
+              <div class="val">CSK vs MI</div>
+              <div class="sub">Big fan-favorite evening clash</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="players">
+    <div class="container">
+      <div class="head reveal">
+        <div>
+          <h2>Top Cricket Players / Form Watch</h2>
+          <p>Dedicated section for top performers, batting form, bowling form and match-winning impact.</p>
+        </div>
+      </div>
+
+      <div class="rank-grid">
+        <div class="rank-card reveal">
+          <div class="rank-badge">1</div>
+          <h3>Virat Kohli</h3>
+          <p>Elite run machine, anchors innings and accelerates in pressure situations.</p>
+          <div class="pts">Runs: 86</div>
+        </div>
+
+        <div class="rank-card reveal">
+          <div class="rank-badge">2</div>
+          <h3>Rohit Sharma</h3>
+          <p>Explosive starts in powerplay and strong six-hitting ability.</p>
+          <div class="pts">Runs: 71</div>
+        </div>
+
+        <div class="rank-card reveal">
+          <div class="rank-badge">3</div>
+          <h3>Jasprit Bumrah</h3>
+          <p>Deadly yorkers, control in death overs and wicket-taking impact.</p>
+          <div class="pts">Wkts: 4</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="series">
+    <div class="container">
+      <div class="head reveal">
+        <div>
+          <h2>Series / Tournament Coverage</h2>
+          <p>Blocks for IPL, international tours, ODI series, T20 leagues and match report sections.</p>
+        </div>
+      </div>
+
+      <div class="series-grid">
+        <div class="series-card reveal">
+          <span class="tagline">IPL / T20</span>
+          <h3>T20 League Coverage</h3>
+          <p>Daily T20 league match previews, toss impact, pitch reports, powerplay trends and death-over analysis.</p>
+        </div>
+
+        <div class="series-card reveal">
+          <span class="tagline">ODI SERIES</span>
+          <h3>International ODI Matches</h3>
+          <p>Complete ODI schedules, result summaries, batting milestones and bowling match-ups.</p>
+        </div>
+
+        <div class="series-card reveal">
+          <span class="tagline">TEST / TOUR</span>
+          <h3>Long Format + Tour Reports</h3>
+          <p>Session reports, wicket alerts, batting partnerships and full match-day breakdowns.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="reports">
+    <div class="container">
+      <div class="head reveal">
+        <div>
+          <h2>Daily Cricket Reports & Updates</h2>
+          <p>Sections for previews, live reports, post-match summaries, toss analysis and player form notes.</p>
+        </div>
+      </div>
+
+      <div class="updates">
+        <div class="update reveal">
+          <h3>Match Preview: Toss, Pitch & Key Battles</h3>
+          <p>Track batting-friendly conditions, toss impact, bowling plans, key player battles and powerplay expectations before the match begins.</p>
+        </div>
+
+        <div class="update reveal">
+          <h3>Live Match Alert: Wickets & Run Flow</h3>
+          <p>Momentum swings, wickets, required run rate, partnerships and death-over pressure can be highlighted here in live report format.</p>
+        </div>
+
+        <div class="update reveal">
+          <h3>Completed Match Report: Full Result Summary</h3>
+          <p>Add result breakdown, turning points, batting heroics, bowling figures and full match summary in this section.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="cta-box reveal">
+        <div>
+          <h2>Join For Daily Cricket Match Updates, Schedules & Reports</h2>
+          <p>
+            Stay connected for live cricket alerts, upcoming schedules, completed results, player reports,
+            toss updates, match previews and daily tournament coverage — all under <strong>VIKRAM MALHAR</strong>.
+          </p>
+        </div>
+
+        <div class="cta-actions">
+          <a class="btn btn-primary" href="https://t.me/+RVFoIKKOME9iZDA1" target="_blank">🏏 Join Telegram Now</a>
+          <a class="btn btn-secondary" href="#players">📊 View Top Players</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer reveal">
+        <div>
+          <h3>VIKRAM MALHAR</h3>
+          <p>
+            Cricket landing page • Live matches • Upcoming fixtures • Completed results • Schedules • Stats • Reports
+          </p>
+        </div>
+        <div class="f-right">
+          <div><strong>Powered By:</strong> VIKRAM MALHAR</div>
+          <div id="footerDate">Loading date...</div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function updateClock(){
+      const now = new Date();
+      const timeText = now.toLocaleTimeString('en-IN', {
+        hour:'2-digit',
+        minute:'2-digit',
+        second:'2-digit'
+      });
+      const dateText = now.toLocaleDateString('en-IN', {
+        weekday:'long',
+        day:'numeric',
+        month:'long',
+        year:'numeric'
+      });
+
+      const liveClock = document.getElementById('liveClock');
+      const footerDate = document.getElementById('footerDate');
+      if(liveClock) liveClock.textContent = timeText;
+      if(footerDate) footerDate.textContent = dateText;
+    }
+    updateClock();
+    setInterval(updateClock,1000);
+
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('show');
+        }
+      });
+    }, {threshold:0.12});
+    reveals.forEach(el=>observer.observe(el));
+
+    const tabs = document.querySelectorAll('.tab');
+    const cards = document.querySelectorAll('#matchCards .card');
+    let activeType = 'all';
+
+    tabs.forEach(tab=>{
+      tab.addEventListener('click',()=>{
+        if(tab.dataset.filter){
+          document.querySelectorAll('.tab[data-filter]').forEach(t=>t.classList.remove('active'));
+          tab.classList.add('active');
+          activeType = tab.dataset.filter;
+          filterCards();
+        }
+      });
+    });
+
+    function filterCards(){
+      cards.forEach(card=>{
+        const type = card.getAttribute('data-type');
+        const typeMatch = activeType === 'all' || activeType === type;
+        card.style.display = typeMatch ? '' : 'none';
+      });
+    }
+  </script>
 </body>
 </html>
